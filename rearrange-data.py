@@ -27,7 +27,7 @@ def load_file(fn):
             allele1 = line[6] #call 1
             allele2 = line[7] #call 2
 
-            if name not in genos.keys(): #if this individual doesn't have genotype calls already
+            if name not in list(genos): #if this individual doesn't have genotype calls already
                 genos[name]= {}
             genos[name][marker] = [allele1, allele2] #add the allele calls for this marker for this individual
 
@@ -47,7 +47,7 @@ with open(outname, 'wb') as outfile: #writing all the data into a csv file
         header_out.append(marker + '_2')
     writer.writerow(header_out) #write the header
     
-    for animal in genos.keys(): #for each individual animal
+    for animal in list(genos): #for each individual animal
         outrow = [animal] #the first columns is the name of the individual
         for marker in all_markers: #for each marker, write the allele calls in order
             outrow += genos[animal][marker]
