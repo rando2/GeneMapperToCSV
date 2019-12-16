@@ -1,10 +1,15 @@
 import csv
 import sys
+import os.path
 
 filenames=sys.argv[1:-1] #provide the program with the file names for each GeneMapper output
 outname = sys.argv[-1] #where do you want the output saved?
 #filename="Summer2019 mp2 Genotypes Table.tsv" #example from Kylie's data
 
+if path.exists(outname):
+    print(outname + " already exists. Running the script will overwrite this file. If you would really like to overwrite this file, please delete it first and then run the script again.")
+    exit(1)
+        
 genos = {} #dictionary to store the genotypes for each individual
 all_markers = [] #list of all the markers found in your data
 
@@ -36,6 +41,9 @@ def load_file(fn):
 
 
 for filename in filenames: #here the program loads in all the filenames you supplied
+    if not path.exists(filename):
+        print("Warning: " + filename + "does not exist.")
+        exit(1)
     load_file(filename) #this is calling the function "load_file" that you can see above
     
 with open(outname, 'wb') as outfile: #writing all the data into a csv file
