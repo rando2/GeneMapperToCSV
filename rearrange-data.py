@@ -2,11 +2,21 @@ import csv
 import sys
 import os.path
 
-filenames=sys.argv[1:-1] #provide the program with the file names for each GeneMapper output
-outname = sys.argv[-1] #where do you want the output saved?
-#filename="Summer2019 mp2 Genotypes Table.tsv" #example from Kylie's data
+if len(sys.argv) == 1: #if you aren't supplying input/output filenames through the command line
+    with open("./filenames.txt", 'r') as fin: #open the file named "filenames.txt"
+        finread = fin.read()
+        names=finread.splitlines() #each line is a different filename
+        filenames = names[:-1] #everything before the last line is an input file
+        if len(sys.argv) == 2:
+            print("No output filename supplied")
+            exit(1)
+        else:
+            outname = names[-1] #the last line is the output file
+else:
+    filenames=sys.argv[1:-1] #provide the program with the file names for each GeneMapper output
+    outname = sys.argv[-1] #where do you want the output saved?
 
-if path.exists(outname):
+if os.path.exists(outname):
     print(outname + " already exists. Running the script will overwrite this file. If you would really like to overwrite this file, please delete it first and then run the script again.")
     exit(1)
         
@@ -41,7 +51,7 @@ def load_file(fn):
 
 
 for filename in filenames: #here the program loads in all the filenames you supplied
-    if not path.exists(filename):
+    if not os.path.exists(filename):
         print("Warning: " + filename + "does not exist.")
         exit(1)
     load_file(filename) #this is calling the function "load_file" that you can see above
@@ -60,4 +70,3 @@ with open(outname, 'wb') as outfile: #writing all the data into a csv file
         for marker in all_markers: #for each marker, write the allele calls in order
             outrow += genos[animal][marker]
         writer.writerow(outrow) #write the data for this individual
-        
